@@ -1,0 +1,418 @@
+/* ===============================
+   CONTAINER
+================================ */
+.orders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.8rem;
+  min-height: 100vh;
+
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   HEADER (TITLE + DASHBOARD)
+================================ */
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.6rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  color: #1f2937;
+  letter-spacing: 0.3px;
+}
+
+/* ===============================
+   DASHBOARD BUTTON
+================================ */
+.btnDashboard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #475569;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnDashboard:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+/* ===============================
+   SEARCH WITH CLEAR BUTTON
+================================ */
+.search-wrapper {
+  position: relative;
+  width: 80%;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+}
+
+.orders-search {
+  width: 100%;
+  display: block;
+  padding: 0.75rem 1rem;
+  padding-right: 2.8rem;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  transition: 0.2s ease;
+}
+
+.orders-search:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.search-clear-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+  background: #d1d5db;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.search-clear-btn:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+/* ===============================
+   EMPTY STATE
+================================ */
+.orders-empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ===============================
+   ORDER CARD
+================================ */
+.order-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 20px;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   HEADER
+================================ */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-customer {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* ===============================
+   META
+================================ */
+.order-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* ===============================
+   AMOUNTS GRID
+================================ */
+.order-amounts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+.amount-box {
+  background: #f9fafb;
+  border-radius: 14px;
+  padding: 0.8rem;
+  text-align: center;
+  transition: 0.2s ease;
+}
+
+.amount-box:hover {
+  background: #f3f4f6;
+}
+
+.amount-box span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6b7280;
+}
+
+.amount-box strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.amount-box.total strong {
+  color: #111827;
+}
+
+.amount-box.paid strong {
+  color: #10b981;
+}
+
+.amount-box.balance strong {
+  color: #ef4444;
+}
+
+/* ===============================
+   STATUS BADGE
+================================ */
+.order-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.order-status.paid {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.order-status.pending,
+.order-status.partial {
+  background: rgba(245, 158, 11, 0.18);
+  color: #b45309;
+}
+
+/* ===============================
+   ACTIONS
+================================ */
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.btn-pay,
+.btn-edit {
+  border: none;
+  cursor: pointer;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+}
+
+.btn-pay {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.35);
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.35);
+}
+
+.btn-pay:hover,
+.btn-edit:hover {
+  transform: translateY(-2px);
+}
+
+.btn-pay:active,
+.btn-edit:active {
+  transform: scale(0.96);
+}
+
+.btn-pay:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 600px) {
+  .orders-header {
+    flex-direction: row; /* keep in row */
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .order-header {
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .order-amounts {
+    grid-template-columns: 1fr;
+  }
+
+  .order-actions {
+    width: 100%;
+  }
+
+  .order-actions button {
+    flex: 1;
+  }
+}
+
+/* ===============================
+   TAP HIGHLIGHT RESET
+================================ */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===============================
+   PRINT BUTTON
+================================ */
+.btn-print {
+  border: none;
+  cursor: pointer;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  color: white;
+  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.35);
+}
+
+.btn-print:hover {
+  transform: translateY(-2px);
+}
+
+.btn-print:active {
+  transform: scale(0.96);
+}
+
+/* ===============================
+   TOGGLE WRAPPER
+================================ */
+.toggleWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1.4rem;
+  padding: 6px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===============================
+   TOGGLE BUTTON
+================================ */
+.toggleWrapper button {
+  border: none;
+  background: transparent;
+  padding: 0.55rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #475569;
+}
+
+/* Hover */
+.toggleWrapper button:hover {
+  background: rgba(99, 102, 241, 0.08);
+  color: #4f46e5;
+}
+
+/* ===============================
+   ACTIVE STATE
+================================ */
+.activeToggle {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: rgb(240, 0, 0) !important;
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.35);
+}
+
+/* Press effect */
+.toggleWrapper button:active {
+  transform: scale(0.95);
+}

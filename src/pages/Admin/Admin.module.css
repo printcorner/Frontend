@@ -1,0 +1,606 @@
+/* ======================================================
+   DESIGN TOKENS
+====================================================== */
+:root {
+  --bg-main: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  --card-bg: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+
+  --border-light: #e5e7eb;
+  --border-soft: #e2e8f0;
+
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+
+  --danger: #dc2626;
+  --danger-bg: #fee2e2;
+
+  --success: #16a34a;
+
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+
+  --shadow-soft: 0 8px 20px rgba(15, 23, 42, 0.05);
+  --shadow-medium: 0 18px 40px rgba(15, 23, 42, 0.08);
+
+  --transition: 0.25s ease;
+}
+
+/* ======================================================
+   ROOT LAYOUT
+====================================================== */
+.admin-page {
+  max-width: 1150px;
+  margin: auto;
+  padding: 40px 20px 100px;
+  background: var(--bg-main);
+  min-height: 100vh;
+  color: var(--text-primary);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.admin-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.order-count {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.25);
+}
+
+.order-count.bump {
+  animation: bump 0.3s ease;
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btnDashboard {
+  background: #ffffff;
+  border: 1px solid var(--border-soft);
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btnDashboard:hover {
+  background: #eef2ff;
+  transform: translateY(-2px);
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+.empty {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ======================================================
+   ORDER CARD
+====================================================== */
+.orderCardApp {
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  margin-bottom: 28px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.orderCardApp:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-3px);
+}
+
+/* ======================================================
+   ORDER HEADER
+====================================================== */
+.orderHeaderApp {
+  padding: 22px 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.orderHeaderApp:hover {
+  background: #f8fafc;
+}
+
+.orderUserSection {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.avatarCircle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3730a3;
+}
+
+.avatarCircle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.customerNameApp {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.newBadgeApp {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #1e293b;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25);
+}
+
+/* ======================================================
+   FILE CARD
+====================================================== */
+.filesContainerApp {
+  padding: 0 26px 26px;
+}
+
+.fileCardApp {
+  background: #f9fbff;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 18px;
+  border: 1px solid #e6edf5;
+  transition: var(--transition);
+}
+
+.fileCardApp:hover {
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+}
+
+.fileTopApp {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.fileBadges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fileNameApp {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ======================================================
+   STATUS BADGES (PREMIUM)
+====================================================== */
+.manualBadge,
+.partialBadge,
+.doubleBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+  transition: var(--transition);
+}
+
+.manualBadge {
+  background: rgba(234, 88, 12, 0.08);
+  color: #ea580c;
+  border: 1px solid rgba(234, 88, 12, 0.2);
+}
+
+.partialBadge {
+  background: rgba(180, 83, 9, 0.08);
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.2);
+}
+
+.doubleBadge {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+/* ======================================================
+   META TAGS
+====================================================== */
+.metaRowApp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.metaRowApp span {
+  background: #ffffff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid var(--border-soft);
+}
+
+.priceTag {
+  background: #ecfdf5 !important;
+  color: var(--success) !important;
+  font-weight: 700;
+  border-color: #bbf7d0 !important;
+}
+
+@media (max-width: 640px) {
+  .metaRowApp {
+    gap: 6px;
+  }
+
+  .metaRowApp span {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+}
+
+/* ======================================================
+   NOTES
+====================================================== */
+.notesApp {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 14px;
+  font-size: 13px;
+  border: 1px solid var(--border-soft);
+}
+
+/* ======================================================
+   FILE ACTIONS
+====================================================== */
+.fileActionsRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.printBtnMini,
+.deleteMiniBtn {
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.printBtnMini {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+}
+
+.printBtnMini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.deleteMiniBtn {
+  background: #f8fafc;
+  color: var(--danger);
+  border: 1px solid #e2e8f0;
+}
+
+.deleteMiniBtn:hover {
+  background: var(--danger-bg);
+}
+
+/* ======================================================
+   ORDER TOTAL + ACTIONS
+====================================================== */
+.orderBottomSection {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.totalEditor {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.totalInput {
+  width: 80px;
+  background: #ffffff;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  text-align: right;
+  box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+.orderActionsBottom {
+  display: flex;
+  gap: 14px;
+}
+
+.quickSaleBtn {
+  flex: 2;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  cursor: pointer;
+}
+
+.deleteOrderBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  background: #f1f5f9;
+  color: var(--danger);
+  cursor: pointer;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+@media (max-width: 640px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .fileActionsRow {
+    justify-content: flex-start;
+  }
+
+  .orderActionsBottom {
+    flex-direction: column;
+  }
+
+  .quickSaleBtn,
+  .deleteOrderBtn {
+    width: 100%;
+  }
+}
+
+/* ======================================================
+   MODAL BACKDROP
+====================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: fadeBackdrop 0.2s ease;
+}
+
+@keyframes fadeBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ======================================================
+   MODAL BOX
+====================================================== */
+.modal-box {
+  background: #ffffff;
+  width: 92%;
+  max-width: 420px;
+  padding: 28px 30px;
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.35);
+  animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ======================================================
+   MODAL TEXT
+====================================================== */
+.modal-box p {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-box small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ======================================================
+   MODAL ACTIONS
+====================================================== */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+/* Base Button */
+.btn {
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cancel Button */
+.btn-dark {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.btn-dark:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* Confirm Button */
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.4);
+}
+
+/* Disabled */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ======================================================
+   SPINNER (If Using)
+====================================================== */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+@media (max-width: 480px) {
+  .modal-box {
+    padding: 24px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

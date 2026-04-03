@@ -1,0 +1,250 @@
+/* ============================= */
+/* REVENUE PAGE (LOGIN STYLE)   */
+/* ============================= */
+
+/* Container */
+.revenue-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Title */
+.revenue-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+/* ============================= */
+/* DATE FILTER                  */
+/* ============================= */
+
+.date-filter {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.date-filter input {
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+}
+
+.date-filter input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+/* 
+.date-filter button {
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.date-filter button:last-child {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.date-filter button:active {
+  transform: scale(0.96);
+} */
+
+/* ============================= */
+/* DATE FILTER BUTTONS (UPGRADE) */
+/* ============================= */
+
+.date-filter button {
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    opacity 0.2s ease;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* 🔵 PRIMARY (Filter) */
+.date-filter button:first-of-type {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+}
+
+.date-filter button:first-of-type:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(99, 102, 241, 0.35);
+}
+
+/* ⚪ SOFT (All) */
+.date-filter button:nth-of-type(2) {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.date-filter button:nth-of-type(2):hover:not(:disabled) {
+  background: #e5e7eb;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* 🟢 SUCCESS (Export) */
+.date-filter button:nth-of-type(3) {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: white;
+}
+
+.date-filter button:nth-of-type(3):hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(22, 163, 74, 0.35);
+}
+
+/* Press effect */
+.date-filter button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Disabled state */
+.date-filter button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============================= */
+/* SUMMARY BOX                  */
+/* ============================= */
+
+.revenue-summary {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  border-radius: 16px;
+  padding: 1.4rem;
+  margin-bottom: 1.2rem;
+
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
+}
+
+.revenue-summary h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.6rem;
+}
+
+.revenue-summary p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin: 0.25rem 0;
+}
+
+/* ============================= */
+/* DAILY REVENUE CARDS          */
+/* ============================= */
+
+.daily-revenue {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  margin-top: 0.8rem;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.daily-revenue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.daily-revenue h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 0.4rem;
+}
+
+.daily-revenue p {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* ============================= */
+/* STATES                       */
+/* ============================= */
+
+.error-text {
+  text-align: center;
+  color: #ef4444;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.loading-text {
+  text-align: center;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* MOBILE                       */
+/* ============================= */
+
+@media (max-width: 600px) {
+  .revenue-container {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .date-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-filter button {
+    width: 100%;
+  }
+}
+
+/* Kill mobile tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,328 @@
+/* ---------- Container ---------- */
+.productsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  background: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Header ---------- */
+.productsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.productsHeader h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+
+/* ---------- Search ---------- */
+.searchInput {
+  width: 80%;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.searchWrapper {
+  position: relative;
+  width: 80%;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+}
+
+.clearBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/* ---------- Product List ---------- */
+.productList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ---------- Product Card ---------- */
+.productCard {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  padding: 1.4rem 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  width: 100%;
+}
+
+.productCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Product Info ---------- */
+.productInfo {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: center;
+}
+
+.productName {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #111827;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* ---------- Stock Badge ---------- */
+.stockBadge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.lowStock {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* ---------- Actions ---------- */
+.productActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ---------- Buttons ---------- */
+.btnEdit {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+}
+
+.btnDelete {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+}
+
+.btnSave {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+}
+
+.btnCancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btnEdit,
+.btnDelete,
+.btnSave,
+.btnCancel {
+  border: none;
+  cursor: pointer;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btnEdit:active,
+.btnDelete:active,
+.btnSave:active,
+.btnCancel:active {
+  transform: scale(0.96);
+}
+
+.btnSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Add Product ---------- */
+.btnAddProduct {
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+}
+
+.btnAddProduct:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Edit Form ---------- */
+.editForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.editForm input {
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.editCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Low Stock Bar ---------- */
+.lowStockBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.lowStockAlert {
+  font-weight: 700;
+  color: #b91c1c;
+}
+
+.btnLowStock {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Empty ---------- */
+.emptyText {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ---------- Confirm Modal ---------- */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.confirmModal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.6rem;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .productCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .productActions {
+    justify-content: flex-end;
+  }
+
+  .productsHeader {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btnAddProduct {
+    width: 100%;
+  }
+}
+
+.productsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 600px) {
+  .productsHeader {
+    flex-direction: row; /* keep justify-between */
+    align-items: center;
+  }
+
+  .btnAddProduct {
+    width: auto;
+  }
+}

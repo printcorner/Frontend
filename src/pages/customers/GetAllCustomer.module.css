@@ -1,0 +1,324 @@
+/* ================= CONTAINER ================= */
+
+.customerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.8rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= HEADER ================= */
+
+.customerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.8rem;
+  position: relative;
+}
+
+.customerHeader::after {
+  content: "";
+  position: absolute;
+  left: -1.8rem; /* extend beyond padding */
+  right: -1.8rem; /* extend beyond padding */
+  bottom: 0;
+  height: 1px;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.customerHeader h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  color: #1f2937;
+}
+
+/* ================= ADD BUTTON ================= */
+
+.btnAddCustomer {
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btnAddCustomer:hover:not(:disabled) {
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.btnAddCustomer:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ================= SEARCH ================= */
+
+.searchWrapper {
+  position: relative;
+  width: 80%;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 2.8rem 0.75rem 1rem;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.searchClear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.searchClear:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.searchClear:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+/* ================= LIST ================= */
+
+.customerList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ================= CARD ================= */
+
+.customerCard {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.customerCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= CUSTOMER INFO ================= */
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.customerName {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #111827;
+  letter-spacing: 0.2px;
+}
+
+.phone {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.customerMeta {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+/* ================= ACTIONS ================= */
+
+.customerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ================= BUTTONS ================= */
+
+.btnEdit,
+.btnDelete,
+.btnSave,
+.btnCancel {
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.btnEdit {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+}
+
+.btnDelete {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+}
+
+.btnSave {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+}
+
+.btnCancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btnEdit:active,
+.btnDelete:active,
+.btnSave:active,
+.btnCancel:active {
+  transform: scale(0.96);
+}
+
+/* ================= EDIT FORM ================= */
+
+.editForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.editForm input[type="text"],
+.editForm input[type="number"] {
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+/* ================= EMPTY ================= */
+
+.emptyText {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ================= CONFIRM MODAL ================= */
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.confirmModal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.6rem;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.confirmModal h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  color: #111827;
+}
+
+.confirmModal p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 1.4rem;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+  .customerCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .customerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .customerHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .customerHeader h2 {
+    font-size: 1.6rem;
+  }
+
+  .btnAddCustomer {
+    width: auto;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}

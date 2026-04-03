@@ -1,0 +1,152 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+}
+
+/* Modal box */
+.modal {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+
+  width: 90%;
+  max-width: 360px;
+
+  padding: 1.6rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+
+  animation: pop 0.2s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Title */
+.modal h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+  text-align: center;
+}
+
+/* Input */
+.modal input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  margin-bottom: 1.3rem;
+}
+
+.modal input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+/* Actions */
+.modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+/* Buttons */
+.btn-pay-bulk,
+.btn-cancel-bulk {
+  border: none;
+  cursor: pointer;
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+
+  font-size: 0.9rem;
+  font-weight: 800;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-pay-bulk {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+}
+
+.btn-cancel-bulk {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Hover */
+.btn-pay-bulk:hover:not(:disabled) {
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-cancel-bulk:hover {
+  background: #d1d5db;
+}
+
+/* Active */
+.btn-pay-bulk:active,
+.btn-cancel-bulk:active {
+  transform: scale(0.96);
+}
+
+/* Kill tap flash */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Outstanding text */
+.bulk-balance {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ef4444;
+  margin-bottom: 0.9rem;
+}
+
+/* Pay full outstanding */
+.btn-full-bulk {
+  width: 100%;
+  margin-bottom: 1rem;
+
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+
+  font-size: 0.85rem;
+  font-weight: 800;
+
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-full-bulk:hover {
+  background: rgba(99, 102, 241, 0.18);
+}
+
+.btn-full-bulk:active {
+  transform: scale(0.96);
+}

@@ -1,0 +1,364 @@
+/* ---------- Container ---------- */
+.expense-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.8rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Header ---------- */
+.expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.expense-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+/* ---------- Add Expense Button ---------- */
+.btn-add-expense {
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-add-expense:hover:not(:disabled) {
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-add-expense:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Search Input ---------- */
+.search-input {
+  width: 80%;
+  max-width: 360px;
+  margin: 0 auto 1.5rem;
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+/* ---------- Date Filter ---------- */
+.date-filter {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.date-filter input[type="date"] {
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.date-filter button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.date-filter button:active {
+  transform: scale(0.96);
+}
+
+/* ---------- Filter Chip ---------- */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(99, 102, 241, 0.15);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.filter-chip button {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #111827;
+}
+
+/* ---------- Error Text ---------- */
+.error-text {
+  color: #b91c1c;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Empty State ---------- */
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}
+
+/* ---------- Summary Box ---------- */
+.summary-box {
+  background: rgba(243, 244, 246, 0.8);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-box h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.3rem 0;
+  color: #111827;
+}
+
+.summary-box p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 0.2rem 0;
+}
+
+.profit-text.profit {
+  color: #10b981;
+}
+
+.profit-text.loss {
+  color: #ef4444;
+}
+
+/* ---------- Expense List ---------- */
+.expense-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ---------- Expense Card ---------- */
+.expense-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.expense-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Editing card */
+.expense-card.editing {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- Expense Actions ---------- */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actions button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  transition: transform 0.15s ease;
+}
+
+.actions button:active {
+  transform: scale(0.96);
+}
+
+/* ---------- Edit Form ---------- */
+.expense-edit-form {
+  display: grid;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.expense-edit-form input,
+.expense-edit-form textarea {
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.expense-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* Buttons */
+.btn-save {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-save:active,
+.btn-cancel:active {
+  transform: scale(0.96);
+}
+
+/* ---------- Delete Modal ---------- */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.delete-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.6rem;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.delete-modal h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  color: #111827;
+}
+
+.delete-modal p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 1.4rem;
+}
+
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.delete-actions button {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-actions .btn-cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.delete-actions .btn-delete {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .expense-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .expense-header h2 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .btn-add-expense {
+    width: auto; /* 🔥 remove full width */
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap; /* prevents wrap */
+    flex-shrink: 0;
+  }
+
+  .expense-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+
+  .date-filter {
+    flex-direction: column;
+  }
+}
