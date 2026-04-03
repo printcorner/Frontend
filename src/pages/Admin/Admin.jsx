@@ -222,13 +222,37 @@ export default function Admin() {
   /* ===============================
      DELETE FILE
   ============================== */
-  const deleteFile = (orderId, fileIndex) => {
+  // const deleteFile = (orderId, fileIndex) => {
+  //   openConfirm("Delete this file?", async () => {
+  //     try {
+  //       setIsDeleting(true);
+
+  //       const res = await authFetch(
+  //         `${BACKEND_URL}/api/admin/orders/${orderId}/file/${fileIndex}`,
+  //         { method: "DELETE" },
+  //       );
+
+  //       const data = await res.json();
+
+  //       setOrders((prev) =>
+  //         prev.map((o) => (o._id === orderId ? data.order : o)),
+  //       );
+  //     } catch (err) {
+  //       toast.error("Failed to delete file");
+  //     } finally {
+  //       setIsDeleting(false);
+  //       closeModal();
+  //     }
+  //   });
+  // };
+
+  const deleteFile = (orderId, fileId) => {
     openConfirm("Delete this file?", async () => {
       try {
         setIsDeleting(true);
 
         const res = await authFetch(
-          `${BACKEND_URL}/api/admin/orders/${orderId}/file/${fileIndex}`,
+          `${BACKEND_URL}/api/admin/orders/${orderId}/file/${fileId}`,
           { method: "DELETE" },
         );
 
@@ -548,7 +572,7 @@ export default function Admin() {
 
                         <button
                           className={styles.deleteMiniBtn}
-                          onClick={() => deleteFile(o._id, i)}
+                          onClick={() => deleteFile(o._id, f._id)}
                         >
                           <FiTrash2 size={14} />
                           Delete
