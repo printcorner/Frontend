@@ -13,6 +13,9 @@ export default function CreateOrder() {
   const toPaise = (r) => Math.round(r * 100);
   const toRupees = (p) => (p / 100).toFixed(2);
 
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [walletUse, setWalletUse] = useState(0);
+
   /* =====================
      Products
   ===================== */
@@ -58,9 +61,14 @@ export default function CreateOrder() {
 
   useEffect(() => {
     if (fullPaid) {
-      setPaidAmount(toRupees(grandTotalPaise));
+      const total = grandTotalPaise / 100;
+      const payable = total - walletUse;
+
+      setPaidAmount(payable.toFixed(2)); // ✅ FIX
     }
-  }, [fullPaid, grandTotalPaise]);
+  }, [fullPaid, grandTotalPaise, walletUse]);
+
+  /* ===================== AUTO WALLET ===================== */
 
   const fetchProducts = async () => {
     try {
@@ -194,12 +202,46 @@ export default function CreateOrder() {
   const extraChargesPaise = adjustmentPaise > 0 ? adjustmentPaise : 0;
   const discountPaise = adjustmentPaise < 0 ? Math.abs(adjustmentPaise) : 0;
 
+  const resetForm = () => {
+    // Customer
+    setSelectedCustomer(null);
+    setCustomerQuery("");
+    setFilteredCustomers([]);
+
+    // Products
+    setProductQuery("");
+    setFilteredProducts([]);
+
+    // Cart
+    setCart([]);
+
+    // Wallet
+    setWalletUse(0);
+    setWalletBalance(0);
+
+    // Totals
+    setSubtotalPaise(0);
+    setCalculatedTotalPaise(0);
+    setGrandTotalPaise(0);
+    setGrandTotalInput("0.00");
+    setManualTotal(false);
+
+    // Payment
+    setPaidAmount("");
+    setFullPaid(true);
+
+    // GST (optional reset)
+    setApplyGST(true);
+  };
+
   /* =====================
      Submit Order
   ===================== */
   const submitOrder = async () => {
     if (!selectedCustomer) return toast.error("Customer required");
     if (cart.length === 0) return toast.error("Cart empty");
+
+    const safeWallet = Math.min(walletUse, walletBalance);
 
     setLoading(true);
     const toastId = toast.loading("Creating order...");
@@ -215,6 +257,7 @@ export default function CreateOrder() {
           price: i.price,
           total: i.price * i.qty,
         })),
+        walletUsed: safeWallet,
 
         subTotal: subtotalPaise / 100,
         gstPercent: applyGST ? 18 : 0,
@@ -236,8 +279,8 @@ export default function CreateOrder() {
       if (!res.ok) throw new Error(data.msg || "Order failed");
 
       toast.success("Order created");
-      setCart([]);
-      setSelectedCustomer(null);
+      resetForm();
+
       fetchProducts();
     } catch (err) {
       toast.error(err.message);
@@ -246,6 +289,9 @@ export default function CreateOrder() {
       setLoading(false);
     }
   };
+
+  const remainingWallet = walletBalance - walletUse;
+  const maxWalletUsable = Math.min(walletBalance, grandTotalPaise / 100);
 
   /* =====================
      Render
@@ -290,6 +336,7 @@ export default function CreateOrder() {
                 key={c.id}
                 onClick={() => {
                   setSelectedCustomer(c);
+                  setWalletBalance(c.walletBalance || 0);
                   setFilteredCustomers([]);
                   setCustomerQuery("");
                 }}
@@ -305,6 +352,93 @@ export default function CreateOrder() {
           <button onClick={() => setSelectedCustomer(null)}>Change</button>
         </div>
       )}
+
+      {/* <div>
+        <p>Wallet Balance: ₹{walletBalance}</p>
+
+        <input
+          type="number"
+          placeholder="Use wallet amount"
+          value={walletUse}
+          // onChange={(e) => setWalletUse(Number(e.target.value))}
+          onChange={(e) => {
+            let value = Number(e.target.value);
+
+            if (value < 0) value = 0;
+            if (value > walletBalance) value = walletBalance;
+
+            setWalletUse(value);
+          }}
+        />
+
+        <p>
+          Pay After Wallet: ₹{(grandTotalPaise / 100 - walletUse).toFixed(2)}
+        </p>
+      </div> */}
+
+      <div className={styles.walletBox}>
+        <div className={styles.walletTop}>
+          <div>
+            <p className={styles.walletLabel}>Customer Wallet</p>
+            <h3 className={styles.walletBalance}>₹{walletBalance}</h3>
+          </div>
+
+          {walletBalance > 0 && (
+            <span className={styles.walletBadge}>Available</span>
+          )}
+        </div>
+
+        <div className={styles.walletInputRow}>
+          <input
+            type="number"
+            placeholder="Enter amount"
+            value={walletUse}
+            onChange={(e) => {
+              let value = Number(e.target.value);
+
+              if (value < 0) value = 0;
+              if (value > walletBalance) value = walletBalance;
+
+              setWalletUse(value);
+            }}
+            className={styles.walletInput}
+          />
+
+          <button
+            className={styles.walletMaxBtn}
+            onClick={() => {
+              if (Math.abs(walletUse - maxWalletUsable) < 0.01) {
+                setWalletUse(0); // remove
+              } else {
+                setWalletUse(maxWalletUsable); // use max
+              }
+            }}
+          >
+            {Math.abs(walletUse - maxWalletUsable) < 0.01
+              ? "Remove Wallet"
+              : "Use Max"}
+          </button>
+        </div>
+
+        <div className={styles.walletSummary}>
+          <div>
+            <span>Using</span>
+            <strong>₹{walletUse}</strong>
+          </div>
+
+          <div>
+            <span>Remaining</span>
+            <strong style={{ color: "#16a34a" }}>
+              ₹{remainingWallet.toFixed(2)}
+            </strong>
+          </div>
+
+          <div>
+            <span>Payable</span>
+            <strong>₹{(grandTotalPaise / 100 - walletUse).toFixed(2)}</strong>
+          </div>
+        </div>
+      </div>
 
       <hr className={styles.divider} />
 
@@ -468,6 +602,7 @@ export default function CreateOrder() {
 
         <div className={styles.summaryRow}>
           <span>Full Paid</span>
+
           <label className={styles.switch}>
             <input
               type="checkbox"
@@ -481,6 +616,9 @@ export default function CreateOrder() {
           </label>
         </div>
 
+        {/* Small helper text */}
+        <p className={styles.smallHint}>Off: extra goes to wallet</p>
+
         <div className={styles.summaryRow}>
           <span>Paid Amount</span>
           <input
@@ -490,6 +628,19 @@ export default function CreateOrder() {
             onChange={(e) => setPaidAmount(e.target.value)}
           />
         </div>
+
+        {Number(paidAmount) > grandTotalPaise / 100 - walletUse && (
+          <div className={styles.summaryRow} style={{ color: "green" }}>
+            <span>Advance</span>
+            <span>
+              ₹
+              {(
+                Number(paidAmount) -
+                (grandTotalPaise / 100 - walletUse)
+              ).toFixed(2)}
+            </span>
+          </div>
+        )}
 
         {discountPaise > 0 && (
           <div className={styles.summaryRow} style={{ color: "green" }}>
@@ -517,10 +668,36 @@ export default function CreateOrder() {
           />
         </div>
 
+        {walletUse > 0 && (
+          <>
+            <div className={styles.summaryRow}>
+              <span>Wallet Used</span>
+              <span style={{ color: "#4f46e5" }}>
+                − ₹{walletUse.toFixed(2)}
+              </span>
+            </div>
+
+            <div className={styles.summaryRow}>
+              <span>Wallet Remaining</span>
+              <span style={{ color: "#16a34a" }}>
+                ₹{(walletBalance - walletUse).toFixed(2)}
+              </span>
+            </div>
+          </>
+        )}
+
+        <div className={styles.summaryRow}>
+          <span>Payable After Wallet</span>
+          <span>₹{(grandTotalPaise / 100 - walletUse).toFixed(2)}</span>
+        </div>
+
         <div className={styles.summaryRow}>
           <span className={styles.summaryStrong}>Final Total</span>
-          <span className={styles.summaryStrong}>
+          {/* <span className={styles.summaryStrong}>
             ₹{toRupees(grandTotalPaise)}
+          </span> */}
+          <span className={styles.summaryStrong}>
+            ₹{(grandTotalPaise / 100 - walletUse).toFixed(2)}
           </span>
         </div>
 
