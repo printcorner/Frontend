@@ -416,3 +416,17 @@
 .toggleWrapper button:active {
   transform: scale(0.95);
 }
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+}
