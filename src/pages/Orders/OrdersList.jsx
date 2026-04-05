@@ -1,565 +1,379 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { authFetch } from "../../utils/authFetch";
 import toast from "react-hot-toast";
-import OrderPaymentModal from "./OrderPaymentModal";
-import styles from "./OrdersList.module.css";
+import "./EditOrder.css";
+import { nanoid } from "nanoid";
 import { BACKEND_URL } from "../../config";
 
-/* ✅ Proper INR Formatter */
-const formatINR = (amount = 0) =>
-  Number(amount).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-export default function OrdersList() {
-  const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [search, setSearch] = useState("");
-  const [payingOrderId, setPayingOrderId] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const [filterStatus, setFilterStatus] = useState("pending");
-  // "pending" | "paid" | "all"
-
+export default function EditOrder() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const loadOrders = async () => {
+  const [order, setOrder] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [manualTotal, setManualTotal] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    fetchOrder();
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    setManualTotal(false);
+  }, [order?.items]);
+
+  const fetchOrder = async () => {
     try {
-      setLoading(true); // 🔥 start loading
-
-      const res = await authFetch(`${BACKEND_URL}/order`);
+      const res = await authFetch(`${BACKEND_URL}/order/${id}`);
       const data = await res.json();
+      if (!res.ok) throw new Error(data.msg);
 
-      setOrders(Array.isArray(data) ? data : []);
+      setOrder({
+        ...data,
+        gstApplied: data.gstPercent > 0, // ✅ correct logic
+        items: (data.items || []).map((i) => ({
+          ...i,
+          rowId: nanoid(),
+          product: typeof i.product === "object" ? i.product : null,
+        })),
+      });
+
+      setIsHydrated(true); // ✅ VERY IMPORTANT
     } catch (err) {
-      toast.error("Failed to load orders");
-    } finally {
-      setLoading(false); // 🔥 stop loading
+      toast.error(err.message);
     }
   };
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
+  const fetchProducts = async () => {
+    try {
+      const res = await authFetch(`${BACKEND_URL}/product`);
+      const data = await res.json();
+      setProducts(Array.isArray(data) ? data : []);
+    } catch {
+      toast.error("Failed to load products");
+    }
+  };
 
-  /* ===============================
-     ESC CLEARS SEARCH
-  ============================== */
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") setSearch("");
-    };
+  /* Quantity */
+  // const incrementQty = (index) => {
+  //   setOrder((prev) => {
+  //     const items = [...prev.items];
+  //     items[index].qty += 1;
+  //     return { ...prev, items };
+  //   });
+  // };
 
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
+  const incrementQty = (index) => {
+    setOrder((prev) => {
+      const item = prev.items[index];
+      const product = products.find((p) => p.id === item.product.id);
 
-  /* ===============================
-     FORMAT DATE
-  ============================== */
-  const formatDate = (date) => {
-    if (!date) return "—";
-    return new Date(date).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+      if (product?.trackStock && item.qty + 1 > product.stock) {
+        toast.error(`Only ${product.stock} ${product.name} left`);
+        return prev;
+      }
+
+      const items = [...prev.items];
+      items[index].qty += 1;
+      return { ...prev, items };
     });
   };
 
-  /* ===============================
-     FILTER LOGIC
-  ============================== */
-  const filteredOrders = orders.filter((o) => {
-    const name = (o.customer?.custName || o.customerName || "").toLowerCase();
-
-    const matchesSearch = name.includes(search.trim().toLowerCase());
-
-    if (filterStatus === "pending") {
-      return o.status !== "paid" && matchesSearch;
-    }
-
-    if (filterStatus === "paid") {
-      return o.status === "paid" && matchesSearch;
-    }
-
-    return matchesSearch;
-  });
-
-  const handlePrint = (order) => {
-    const printWindow = window.open("", "_blank");
-
-    if (!printWindow) return;
-
-    const itemsHtml = (order.items || [])
-      .map(
-        (item, index) => `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${item.name || item.product?.name || "-"}</td>
-          <td class="text-center">${item.price || 0}</td>
-          <td class="text-center">${item.qty || 0}</td>
-          <td class="text-right">₹${formatINR(item.total || 0)}</td>
-        </tr>
-      `,
-      )
-      .join("");
-
-    const balanceClass =
-      order.balanceAmount > 0 ? "balance-due" : "balance-clear";
-
-    printWindow.document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8" />
-<title>Invoice</title>
-
-<style>
-
-@page {
-  size: A4;
-  margin: 20mm;
-}
-
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  color: #222;
-  background: #fff;
-}
-
-.invoice-wrapper {
-  max-width: 850px;
-  margin: auto;
-}
-
-/* ================= HEADER ================= */
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 2px solid #000;
-  padding-bottom: 15px;
-  margin-bottom: 25px;
-}
-
-.shop-name {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.shop-details {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.6;
-}
-
-.invoice-meta {
-  text-align: right;
-  font-size: 13px;
-}
-
-.invoice-title {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 6px;
-}
-
-.paid { background: #e8f5e9; color: #2e7d32; }
-.partial { background: #fff8e1; color: #f57c00; }
-.pending { background: #ffebee; color: #c62828; }
-
-/* ================= BILL TO ================= */
-
-.bill-box {
-  margin-bottom: 25px;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-/* ================= TABLE ================= */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-thead {
-  background: #f5f5f5;
-}
-
-th {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 2px solid #ddd;
-  font-weight: 600;
-}
-
-td {
-  padding: 9px;
-  border-bottom: 1px solid #eee;
-}
-
-.text-right { text-align: right; }
-.text-center { text-align: center; }
-
-/* ================= TOTALS ================= */
-
-.totals-section {
-  width: 360px;
-  margin-left: auto;
-  margin-top: 30px;
-  font-size: 14px;
-}
-
-.totals-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-}
-
-.totals-row.total {
-  font-size: 17px;
-  font-weight: 700;
-  border-top: 2px solid #000;
-  padding-top: 10px;
-}
-
-.balance-due {
-  color: #d32f2f;
-  font-weight: 700;
-}
-
-.balance-clear {
-  color: #2e7d32;
-  font-weight: 700;
-}
-
-/* ================= SIGNATURE ================= */
-
-.signature {
-  margin-top: 70px;
-  text-align: right;
-  font-size: 13px;
-}
-
-/* ================= FOOTER ================= */
-
-.footer {
-  margin-top: 50px;
-  text-align: center;
-  font-size: 12px;
-  color: #777;
-}
-
-@media print {
-  body {
-    -webkit-print-color-adjust: exact;
-  }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="invoice-wrapper">
-
-  <!-- HEADER -->
-  <div class="header">
-
-    <div>
-      <div class="shop-name">Print Corner</div>
-      <div class="shop-details">
-        Shop no 04, Guru Ramdas Complex, Jalna Rd<br/>
-        Phone: +917020441742
-      </div>
-    </div>
-
-    <div class="invoice-meta">
-      <div class="invoice-title">INVOICE</div>
-      <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
-      <div class="status-badge ${order.status}">
-        ${order.status.toUpperCase()}
-      </div>
-    </div>
-
-  </div>
-
-  <!-- BILL TO -->
-  <div class="bill-box">
-    <strong>Bill To:</strong><br/>
-    ${order.customer?.custName || order.customerName || "-"}
-  </div>
-
-  <!-- ITEMS -->
-  <table>
-    <thead>
-      <tr>
-        <th style="width:60px;">No</th>
-        <th>Description</th>
-        <th style="width:90px;" class="text-center">Price</th>
-        <th style="width:90px;" class="text-center">Qty</th>
-        <th style="width:120px;" class="text-right">Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${
-        itemsHtml ||
-        "<tr><td colspan='4' style='text-align:center;'>No items</td></tr>"
-      }
-    </tbody>
-  </table>
-
-  <!-- TOTALS -->
-  <div class="totals-section">
-
-    <div class="totals-row">
-      <span>Sub Total</span>
-      <span>₹${formatINR(order.subTotal || 0)}</span>
-    </div>
-
-    ${
-      order.gstAmount > 0
-        ? `<div class="totals-row">
-             <span>GST (${order.gstPercent || 0}%)</span>
-             <span>₹${formatINR(order.gstAmount)}</span>
-           </div>`
-        : ""
-    }
-
-    ${
-      order.extraCharges > 0
-        ? `<div class="totals-row">
-             <span>Extra Charges</span>
-             <span>₹${formatINR(order.extraCharges)}</span>
-           </div>`
-        : ""
-    }
-
-    ${
-      order.discount > 0
-        ? `<div class="totals-row">
-             <span>Discount</span>
-             <span>- ₹${formatINR(order.discount)}</span>
-           </div>`
-        : ""
-    }
-
-    <div class="totals-row total">
-      <span>Total</span>
-      <span>₹${formatINR(order.totalAmount)}</span>
-    </div>
-
-    <div class="totals-row">
-      <span>Paid</span>
-      <span>₹${formatINR(order.paidAmount)}</span>
-    </div>
-
-    <div class="totals-row ${balanceClass}">
-      <span>Balance</span>
-      <span>₹${formatINR(order.balanceAmount)}</span>
-    </div>
-
-  </div>
-
- 
-
-  
-
-</div>
-
-<script>
-window.onload = function() {
-  window.print();
-  window.onafterprint = function() {
-    window.close();
-  }
-}
-</script>
-
-</body>
-</html>
-  `);
-
-    printWindow.document.close();
+  const decrementQty = (index) => {
+    setOrder((prev) => {
+      const items = [...prev.items];
+      items[index].qty -= 1;
+      return { ...prev, items: items.filter((i) => i.qty > 0) };
+    });
   };
 
+  /* ❌ Remove item */
+  const removeItem = (index) => {
+    setOrder((prev) => ({
+      ...prev,
+      items: prev.items.filter((_, i) => i !== index),
+    }));
+  };
+
+  /* Add product */
+  const addProduct = (product) => {
+    setOrder((prev) => {
+      const idx = prev.items.findIndex((i) => i.product?.id === product.id);
+
+      if (idx !== -1) {
+        const items = [...prev.items];
+        items[idx].qty += 1;
+        return { ...prev, items };
+      }
+
+      return {
+        ...prev,
+        items: [
+          ...prev.items,
+          {
+            product,
+            qty: 1,
+            price: product.price, // ✅ store price at time of edit
+            rowId: nanoid(), // ✅ NEW ROW KEY
+          },
+        ],
+      };
+    });
+  };
+
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  /* Totals */
+  const subTotal =
+    order?.items.reduce((sum, i) => sum + (i.price || 0) * i.qty, 0) || 0;
+
+  const gstAmount = order?.gstApplied ? subTotal * 0.18 : 0;
+  const totalAmount = subTotal + gstAmount;
+
+  const calculateAdjustment = (manualTotal) => {
+    const subTotal =
+      order.items.reduce((sum, i) => sum + (i.price || 0) * i.qty, 0) || 0;
+
+    const gstAmount = order.gstApplied ? subTotal * 0.18 : 0;
+
+    const calculatedTotal = subTotal + gstAmount;
+    const adjustment = manualTotal - calculatedTotal;
+
+    return {
+      extraCharges: adjustment > 0 ? adjustment : 0,
+      discount: adjustment < 0 ? Math.abs(adjustment) : 0,
+    };
+  };
+
+  useEffect(() => {
+    if (!order || !isHydrated || manualTotal) return;
+
+    const subTotal =
+      order.items.reduce((sum, i) => sum + (i.price || 0) * i.qty, 0) || 0;
+
+    const gstAmount = order.gstApplied ? subTotal * 0.18 : 0;
+
+    const extraCharges = Number(order.extraCharges || 0);
+    const discount = Number(order.discount || 0);
+
+    const finalTotal = subTotal + gstAmount + extraCharges - discount;
+
+    setOrder((prev) => ({
+      ...prev,
+      totalAmount: Number(finalTotal.toFixed(2)),
+    }));
+  }, [order?.items, order?.gstApplied, isHydrated]);
+
+  const saveChanges = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        items: order.items.map((i) => ({
+          product: i.product.id || i.product._id, // ✅ id-first
+          qty: i.qty,
+          price: i.price, // ✅ send edited price
+        })),
+        gstApplied: order.gstApplied,
+        totalAmount: order.totalAmount, // ✅ optional manual override
+        extraCharges: order.extraCharges || 0,
+        discount: order.discount || 0,
+      };
+
+      const res = await authFetch(`${BACKEND_URL}/order/edit/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.msg);
+
+      toast.success("Order updated");
+      // navigate("/orderlist");
+      navigate("/admin/dashboard", { replace: true });
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!order) return <p>Loading...</p>;
+
   return (
-    <div className={styles["orders-container"]}>
-      {/* ================= HEADER ================= */}
-      <div className={styles["orders-header"]}>
-        <h2 className={styles.title}>Orders</h2>
+    <div className="edit-order-overlay">
+      <div className="edit-order-modal">
+        <div className="order-header">
+          <div>{order.customer?.custName || "—"}</div>
 
-        <button
-          className={styles.btnDashboard}
-          onClick={() => navigate("/admin/dashboard")}
-        >
-          Dashboard
-        </button>
-      </div>
-
-      <div className={styles.toggleWrapper}>
-        <button
-          className={filterStatus === "pending" ? styles.activeToggle : ""}
-          onClick={() => setFilterStatus("pending")}
-        >
-          Pending
-        </button>
-
-        <button
-          className={filterStatus === "paid" ? styles.activeToggle : ""}
-          onClick={() => setFilterStatus("paid")}
-        >
-          Paid
-        </button>
-
-        <button
-          className={filterStatus === "all" ? styles.activeToggle : ""}
-          onClick={() => setFilterStatus("all")}
-        >
-          All
-        </button>
-      </div>
-
-      {/* ================= SEARCH ================= */}
-      <div className={styles["search-wrapper"]}>
-        <input
-          type="text"
-          className={styles["orders-search"]}
-          placeholder="Search by customer name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        {search && (
           <button
-            type="button"
-            className={styles["search-clear-btn"]}
-            onClick={() => setSearch("")}
+            className="btn-close"
+            onClick={() => navigate("/admin/dashboard", { replace: true })}
           >
-            ×
+            ✕
           </button>
-        )}
-      </div>
+        </div>
 
-      {!loading && filteredOrders.length === 0 && (
-        <p className={styles["orders-empty"]}>No orders found</p>
-      )}
+        {/* Items */}
+        <h3>Items</h3>
 
-      {/* ================= LIST ================= */}
-      {/* ================= LIST ================= */}
-      {loading ? (
-        <div className={styles["orders-loading"]}>Loading orders...</div>
-      ) : filteredOrders.length === 0 ? (
-        <p className={styles["orders-empty"]}>No orders found</p>
-      ) : (
-        filteredOrders.map((o) => (
-          <div key={o._id} className={styles["order-card"]}>
-            {/* Header */}
-            <div className={styles["order-header"]}>
-              <div className={styles["order-customer"]}>
-                {o.customer?.custName || o.customerName || "—"}
+        {order.items.length === 0 && <p>No items</p>}
+
+        <div className="order-items-list">
+          {order.items.map((item, idx) => (
+            <div key={item.rowId} className="order-item">
+              <div className="item-left">
+                <strong>{item.product?.name}</strong>
+                <div className="price-edit">
+                  ₹
+                  <input
+                    type="number"
+                    value={item.price}
+                    min="0"
+                    onChange={(e) => {
+                      const newPrice = Number(e.target.value);
+
+                      setOrder((prev) => {
+                        const items = [...prev.items];
+                        items[idx].price = newPrice;
+                        return { ...prev, items };
+                      });
+                    }}
+                  />
+                </div>
               </div>
 
-              <span
-                className={`${styles["order-status"]} ${
-                  styles[o.status || "pending"]
-                }`}
-              >
-                {o.status || "pending"}
-              </span>
-            </div>
+              <div className="qty-controls">
+                <button onClick={() => decrementQty(idx)}>-</button>
+                <span>{item.qty}</span>
+                <button onClick={() => incrementQty(idx)}>+</button>
 
-            {/* Meta */}
-            <div className={styles["order-meta"]}>
-              <span>Date: {formatDate(o.createdAt)}</span>
-            </div>
+                <span className="item-total">
+                  ₹{(item.qty * (item.price || 0)).toFixed(2)}
+                </span>
 
-            {/* Amounts */}
-            <div className={styles["order-amounts"]}>
-              <div className={`${styles["amount-box"]} ${styles.total}`}>
-                <span>Total</span>
-                <strong>₹{formatINR(o.totalAmount)}</strong>
-              </div>
-
-              <div className={`${styles["amount-box"]} ${styles.paid}`}>
-                <span>Paid</span>
-                <strong>₹{formatINR(o.paidAmount)}</strong>
-              </div>
-
-              <div className={`${styles["amount-box"]} ${styles.balance}`}>
-                <span>Balance</span>
-                <strong>₹{formatINR(o.balanceAmount)}</strong>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className={styles["order-actions"]}>
-              {o.balanceAmount > 0 && (
-                <button
-                  className={styles["btn-pay"]}
-                  disabled={payingOrderId === o._id}
-                  onClick={() => {
-                    setPayingOrderId(o._id);
-                    setSelectedOrder(o);
-                  }}
-                >
-                  {payingOrderId === o._id ? "Processing..." : "Pay"}
+                <button className="btn-remove" onClick={() => removeItem(idx)}>
+                  ✕
                 </button>
-              )}
-
-              <button
-                className={styles["btn-edit"]}
-                onClick={() => navigate(`/orders/${o._id}/edit`)}
-              >
-                Edit
-              </button>
-
-              <button
-                className={styles["btn-print"]}
-                onClick={() => handlePrint(o)}
-              >
-                Print
-              </button>
+              </div>
             </div>
-          </div>
-        ))
-      )}
+          ))}
+        </div>
 
-      {/* ================= MODAL ================= */}
-      {selectedOrder && (
-        <OrderPaymentModal
-          order={selectedOrder}
-          onClose={() => {
-            setSelectedOrder(null);
-            setPayingOrderId(null);
-          }}
-          onSuccess={() => {
-            setPayingOrderId(null);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            setSelectedOrder(null);
-            loadOrders(); // 🔥 refresh immediately
-          }}
-        />
-      )}
+        {/* Product search */}
+        <h3>Add Products</h3>
+
+        <div className="product-search-wrapper">
+          <input
+            className="product-search"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          {search && (
+            <button
+              type="button"
+              className="search-clear-btn"
+              onClick={() => setSearch("")}
+            >
+              ×
+            </button>
+          )}
+        </div>
+
+        {search.trim() !== "" && (
+          <div className="product-list">
+            {filteredProducts.length === 0 && (
+              <p className="no-products">No products found</p>
+            )}
+
+            {filteredProducts.map((p) => (
+              <button
+                key={p._id}
+                className="product-chip"
+                onClick={() => addProduct(p)}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <hr />
+
+        {/* GST */}
+        <div className="gst-toggle-row">
+          <span className="gst-label">Apply GST (18%)</span>
+
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={!!order.gstApplied}
+              onChange={() =>
+                setOrder((prev) => ({
+                  ...prev,
+                  gstApplied: !prev.gstApplied,
+                }))
+              }
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+
+        <div className="totals">
+          <p>Subtotal: ₹{subTotal.toFixed(2)}</p>
+          <p>GST: ₹{gstAmount.toFixed(2)}</p>
+          {/* <p className="grand-total">Total: ₹{totalAmount.toFixed(2)}</p> */}
+
+          {order.extraCharges > 0 && (
+            <p style={{ color: "red" }}>
+              Extra Charges: +₹{order.extraCharges.toFixed(2)}
+            </p>
+          )}
+
+          {order.discount > 0 && (
+            <p style={{ color: "green" }}>
+              Discount: −₹{order.discount.toFixed(2)}
+            </p>
+          )}
+
+          <label>
+            Total Amount
+            <input
+              type="number"
+              value={order.totalAmount}
+              onChange={(e) => {
+                const manualTotal = Number(e.target.value);
+                setManualTotal(true);
+
+                const { extraCharges, discount } =
+                  calculateAdjustment(manualTotal);
+
+                setOrder((p) => ({
+                  ...p,
+                  totalAmount: manualTotal,
+                  extraCharges,
+                  discount,
+                }));
+              }}
+            />
+          </label>
+        </div>
+
+        <button
+          className="btn-save-order"
+          onClick={saveChanges}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Changes"}
+        </button>
+      </div>
     </div>
   );
 }
