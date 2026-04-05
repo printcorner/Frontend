@@ -1,0 +1,207 @@
+/* ==============================
+   OVERLAY (FIXED CENTER + NO SCROLL ISSUE)
+============================== */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: grid;
+  place-items: center;
+
+  z-index: 9999;
+
+  padding: 1rem; /* mobile safe */
+  backdrop-filter: blur(2px);
+}
+
+/* ==============================
+   MODAL BOX
+============================== */
+
+.modal {
+  width: 100%;
+  max-width: 380px;
+
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.4rem;
+
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+
+  animation: modalIn 0.25s ease;
+}
+
+/* ==============================
+   ANIMATION
+============================== */
+
+@keyframes modalIn {
+  from {
+    transform: translateY(30px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==============================
+   HEADER
+============================== */
+
+.modal h3 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+/* ==============================
+   INFO BOX
+============================== */
+
+.infoBox {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.infoBox span {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.infoBox strong {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* ==============================
+   ACTION BUTTONS
+============================== */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.actions button {
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* BUTTON COLORS */
+
+.wallet {
+  background: #6366f1;
+  color: white;
+}
+
+.wallet:hover {
+  background: #4f46e5;
+}
+
+.refund {
+  background: #ef4444;
+  color: white;
+}
+
+.refund:hover {
+  background: #dc2626;
+}
+
+.ignore {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.ignore:hover {
+  background: #d1d5db;
+}
+
+/* ==============================
+   CANCEL BUTTON
+============================== */
+
+.cancel {
+  margin-top: 12px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.cancel:hover {
+  color: #111827;
+}
+
+/* ==============================
+   MOBILE IMPROVEMENTS
+============================== */
+
+@media (max-width: 600px) {
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px;
+    padding: 1.2rem;
+  }
+
+  .actions button {
+    height: 48px;
+    font-size: 1rem;
+  }
+
+  .infoBox strong {
+    font-size: 1.3rem;
+  }
+}
+
+/* ==============================
+   OPTIONAL: BOTTOM SHEET STYLE
+============================== */
+/*
+@media (max-width: 600px) {
+  .overlay {
+    align-items: flex-end;
+  }
+
+  .modal {
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+*/
