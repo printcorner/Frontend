@@ -194,7 +194,8 @@ export default function EditOrder() {
       if (!res.ok) throw new Error(data.msg);
 
       toast.success("Order updated");
-      navigate("/orderlist");
+      // navigate("/orderlist");
+      navigate("/admin/dashboard", { replace: true });
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -210,7 +211,10 @@ export default function EditOrder() {
         <div className="order-header">
           <div>{order.customer?.custName || "—"}</div>
 
-          <button className="btn-close" onClick={() => navigate("/orderlist")}>
+          <button
+            className="btn-close"
+            onClick={() => navigate("/admin/dashboard", { replace: true })}
+          >
             ✕
           </button>
         </div>
